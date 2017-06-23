@@ -1,0 +1,34 @@
+﻿<Window x:Class="TranslateXML.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TranslateXML"
+        mc:Ignorable="d"
+        Title="Translate XML" Height="543.4" Width="525" Icon="AppIcon.ico" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Button x:Name="buttonTranslate" Content="Translate" Margin="0,10,100.4,0" VerticalAlignment="Top" Click="buttonTranslate_Click" HorizontalAlignment="Right" Width="85" Height="19"/>
+        <Label x:Name="label1" Content="Input" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="86" Height="26"/>
+        <Label x:Name="label1_Copy" Content="Output folder" HorizontalAlignment="Left" Margin="9,71,0,0" VerticalAlignment="Top" Width="86" Height="26"/>
+        <TextBox x:Name="textBoxOutput" Height="23" Margin="99,75,10.4,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="85" SelectionChanged="comboBox_SelectionChanged" Height="22">
+            <ComboBoxItem Content="SB xml"/>
+            <ComboBoxItem Content="SB resx"/>
+        </ComboBox>
+        <Button x:Name="buttonHelp" Content="Help" Margin="0,10,10.4,0" VerticalAlignment="Top" Click="buttonHelp_Click" HorizontalAlignment="Right" Width="85" RenderTransformOrigin="0.502,0.5" Height="19"/>
+        <ComboBox x:Name="comboBoxInput" Margin="99,43,10.4,0" VerticalAlignment="Top" SelectionChanged="comboBoxInput_SelectionChanged" Height="22"/>
+        <Button x:Name="buttonAddXML" Content="Add xml" Margin="0,10,190.4,0" VerticalAlignment="Top" Click="buttonAdd_Click" HorizontalAlignment="Right" Width="85" RenderTransformOrigin="0.502,0.5" ToolTip="Add a file to the Input list" Height="19"/>
+        <ProgressBar x:Name="progress" Margin="10,0,10.4,9.6" Foreground="#FF4EBFCA" VerticalAlignment="Bottom" Height="16" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="textBoxProgress" Margin="10,0,10.4,9.6" HorizontalContentAlignment="Center" FontSize="10" IsReadOnly="True" TextOptions.TextFormattingMode="Display" Background="Transparent" BorderBrush="#00ABADB3" Height="16" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
+        <Grid Margin="0,102,0.4,25.6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="listBoxFrom" Margin="10,40,10.2,10" SelectionChanged="listBoxFrom_SelectionChanged"/>
+            <Label x:Name="label" Content="Translate From" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" HorizontalAlignment="Left" Width="239" HorizontalContentAlignment="Center"/>
+            <Label x:Name="label_Copy" Content="Translate To" Margin="9.8,10,11.4,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" Grid.Column="1" HorizontalContentAlignment="Center"/>
+            <ListBox x:Name="listBoxTo" Margin="8.8,40,10.4,10" SelectionChanged="listBoxTo_SelectionChanged" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</Window>
