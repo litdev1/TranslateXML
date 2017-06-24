@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -134,77 +133,78 @@ namespace TranslateXML
         private ListBoxItem no;
         private string SBpath = null;
         private DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        private bool working = false;
+        private bool bTranslating = false;
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (!working) progress.Value = 0;
-            Cursor = working ? Cursors.Wait : Cursors.Arrow;
-            buttonAddXML.IsEnabled = !working;
-            buttonTranslate.IsEnabled = !working;
-            comboBoxInput.IsEnabled = !working;
-            textBoxOutput.IsEnabled = !working;
-            comboBox.IsEnabled = !working;
-            listBoxFrom.IsEnabled = !working;
-            listBoxTo.IsEnabled = !working;
-            if (working)
-            {
-                textBoxProgress.Text = string.Format("{0} % Complete", 100*nodeCount/totalCount);
-            }
-            else
-            {
-                textBoxProgress.Text = "";
-            }
+            if (!bTranslating) progress.Value = 0;
+            if (!bTranslating) textBoxProgress.Text = "";
+            Cursor = bTranslating ? Cursors.Wait : Cursors.Arrow;
+            buttonAddXML.IsEnabled = !bTranslating;
+            comboBoxInput.IsEnabled = !bTranslating;
+            textBoxOutput.IsEnabled = !bTranslating;
+            comboBox.IsEnabled = !bTranslating;
+            listBoxFrom.IsEnabled = !bTranslating;
+            listBoxTo.IsEnabled = !bTranslating;
         }
 
         private void Worker(Object obj)
         {
-            working = true;
+            bTranslating = true;
             XmlDocument doc = (XmlDocument)((Object[])obj)[0];
-            bool bTranslate = (bool)((Object[])obj)[1];
-            string xmlTo = (string)((Object[])obj)[2];
-            Parse(doc.DocumentElement, bTranslate);
-            doc.Save(xmlTo);
-            working = false;
+            string xmlTo = (string)((Object[])obj)[1];
+            Parse(doc.DocumentElement);
+            if (bTranslating) doc.Save(xmlTo);
+            bTranslating = false;
         }
 
-        private void Parse(XmlNode node, bool bTranslate)
+        private void Parse(XmlNode node)
         {
             foreach (XmlNode child in node.ChildNodes)
             {
                 if (child.NodeType == XmlNodeType.Text)
                 {
                     nodeCount++;
-                    if (bTranslate)
+                    if (bTranslating)
                     {
                         child.Value = translator.Translate(child.Value, languages[iFrom], languages[iTo]);
+                        Dispatcher.Invoke(() => {
+                            progress.Value = nodeCount;
+                            textBoxProgress.Text = string.Format("{0} % Complete", 100 * nodeCount / totalCount);
+                        });
                     }
                 }
-                if (bTranslate)
-                {
-                    Dispatcher.Invoke(() => { progress.Value = nodeCount; });
-                }
-                Parse(child, bTranslate);
+                Parse(child);
             }
         }
 
         private void buttonTranslate_Click(object sender, RoutedEventArgs e)
         {
-            xmlFrom = comboBoxInput.Text;
-            if (!File.Exists(xmlFrom)) return;
-            xmlTo = textBoxOutput.Text + "\\" + System.IO.Path.GetFileNameWithoutExtension(xmlFrom) + "." + languages[iTo].Substring(0,2) + System.IO.Path.GetExtension(xmlFrom);
-            if (comboBox.SelectedIndex == 1) xmlTo = xmlTo.Replace(".es.", ".");
-            progress.Value = 0;
+            if (bTranslating)
+            {
+                bTranslating = false;
+                buttonTranslate.Content = "Translate";
+            }
+            else
+            {
+                xmlFrom = comboBoxInput.Text;
+                if (!File.Exists(xmlFrom)) return;
+                xmlTo = textBoxOutput.Text + "\\" + Path.GetFileNameWithoutExtension(xmlFrom) + "." + languages[iTo].Substring(0, 2) + Path.GetExtension(xmlFrom);
+                if (comboBox.SelectedIndex == 1) xmlTo = xmlTo.Replace(".es.", ".");
+                progress.Value = 0;
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(xmlFrom);
-            nodeCount = 0;
-            Parse(doc.DocumentElement, false);
-            totalCount = nodeCount;
-            progress.Maximum = totalCount;
-            nodeCount = 0;
-            Thread thread = new Thread(new ParameterizedThreadStart(Worker));
-            thread.Start(new Object[] { doc, true, xmlTo });
+                XmlDocument doc = new XmlDocument();
+                doc.Load(xmlFrom);
+                nodeCount = 0;
+                Parse(doc.DocumentElement);
+                totalCount = nodeCount;
+                progress.Maximum = totalCount;
+
+                nodeCount = 0;
+                Thread thread = new Thread(new ParameterizedThreadStart(Worker));
+                thread.Start(new Object[] { doc, xmlTo });
+                buttonTranslate.Content = "Cancel";
+            }
         }
 
         private void listBoxFrom_SelectionChanged(object sender, SelectionChangedEventArgs e)

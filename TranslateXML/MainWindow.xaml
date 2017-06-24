@@ -26,7 +26,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <ListBox x:Name="listBoxFrom" Margin="10,40,10.2,10" SelectionChanged="listBoxFrom_SelectionChanged"/>
-            <Label x:Name="label" Content="Translate From" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" HorizontalAlignment="Left" Width="239" HorizontalContentAlignment="Center"/>
+            <Label x:Name="label" Content="Translate From" Margin="10,10,10.2,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" HorizontalContentAlignment="Center"/>
             <Label x:Name="label_Copy" Content="Translate To" Margin="9.8,10,11.4,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" Grid.Column="1" HorizontalContentAlignment="Center"/>
             <ListBox x:Name="listBoxTo" Margin="8.8,40,10.4,10" SelectionChanged="listBoxTo_SelectionChanged" Grid.Column="1"/>
         </Grid>
