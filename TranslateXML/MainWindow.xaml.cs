@@ -211,12 +211,14 @@ namespace TranslateXML
         {
             ListBox listbox = (ListBox)sender;
             iFrom = listbox.SelectedIndex;
+            labelFrom.Content = "Translate from " + languageNames[iFrom];
         }
 
         private void listBoxTo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox listbox = (ListBox)sender;
             iTo = listbox.SelectedIndex;
+            labelTo.Content = "Translate to " + languageNames[iTo];
         }
 
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

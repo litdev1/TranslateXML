@@ -7,28 +7,90 @@
         mc:Ignorable="d"
         Title="Translate XML" Height="543.4" Width="525" Icon="AppIcon.ico" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="buttonTranslate" Content="Translate" Margin="0,10,100.4,0" VerticalAlignment="Top" Click="buttonTranslate_Click" HorizontalAlignment="Right" Width="85" Height="19"/>
-        <Label x:Name="label1" Content="Input" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="86" Height="26"/>
-        <Label x:Name="label1_Copy" Content="Output folder" HorizontalAlignment="Left" Margin="9,71,0,0" VerticalAlignment="Top" Width="86" Height="26"/>
-        <TextBox x:Name="textBoxOutput" Height="23" Margin="99,75,10.4,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="85" SelectionChanged="comboBox_SelectionChanged" Height="22">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                <GradientStop Color="White"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Button x:Name="buttonTranslate" Content="Translate" Margin="0,10,100.4,0" VerticalAlignment="Top" Click="buttonTranslate_Click" HorizontalAlignment="Right" Width="85" Height="22">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Label x:Name="label1" Content="Input" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="86" Height="26" HorizontalContentAlignment="Right"/>
+        <Label x:Name="label1_Copy" Content="Output folder" HorizontalAlignment="Left" Margin="9,71,0,0" VerticalAlignment="Top" Width="86" Height="26" HorizontalContentAlignment="Right"/>
+        <TextBox x:Name="textBoxOutput" Height="23" Margin="99,75,10.4,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="99,10,0,0" VerticalAlignment="Top" Width="85" SelectionChanged="comboBox_SelectionChanged" Height="22">
+            <ComboBox.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFF0F0F0"/>
+                    <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                </LinearGradientBrush>
+            </ComboBox.Background>
             <ComboBoxItem Content="SB xml"/>
             <ComboBoxItem Content="SB resx"/>
         </ComboBox>
-        <Button x:Name="buttonHelp" Content="Help" Margin="0,10,10.4,0" VerticalAlignment="Top" Click="buttonHelp_Click" HorizontalAlignment="Right" Width="85" RenderTransformOrigin="0.502,0.5" Height="19"/>
-        <ComboBox x:Name="comboBoxInput" Margin="99,43,10.4,0" VerticalAlignment="Top" SelectionChanged="comboBoxInput_SelectionChanged" Height="22"/>
-        <Button x:Name="buttonAddXML" Content="Add xml" Margin="0,10,190.4,0" VerticalAlignment="Top" Click="buttonAdd_Click" HorizontalAlignment="Right" Width="85" RenderTransformOrigin="0.502,0.5" ToolTip="Add a file to the Input list" Height="19"/>
-        <ProgressBar x:Name="progress" Margin="10,0,10.4,9.6" Foreground="#FF4EBFCA" VerticalAlignment="Bottom" Height="16" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="buttonHelp" Content="Help" Margin="0,10,10.4,0" VerticalAlignment="Top" Click="buttonHelp_Click" HorizontalAlignment="Right" Width="85" Height="22">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <ComboBox x:Name="comboBoxInput" Margin="99,43,10.4,0" VerticalAlignment="Top" SelectionChanged="comboBoxInput_SelectionChanged" Height="22">
+            <ComboBox.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                    <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                </LinearGradientBrush>
+            </ComboBox.Background>
+        </ComboBox>
+        <Button x:Name="buttonAddXML" Content="Add xml" Margin="0,10,190.4,0" VerticalAlignment="Top" Click="buttonAdd_Click" HorizontalAlignment="Right" Width="85" ToolTip="Add a file to the Input list" Height="22">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <ProgressBar x:Name="progress" Margin="10,0,10.4,9.6" Foreground="#FF327D85" VerticalAlignment="Bottom" Height="16" />
         <TextBox x:Name="textBoxProgress" Margin="10,0,10.4,9.6" HorizontalContentAlignment="Center" FontSize="10" IsReadOnly="True" TextOptions.TextFormattingMode="Display" Background="Transparent" BorderBrush="#00ABADB3" Height="16" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
         <Grid Margin="0,102,0.4,25.6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ListBox x:Name="listBoxFrom" Margin="10,40,10.2,10" SelectionChanged="listBoxFrom_SelectionChanged"/>
-            <Label x:Name="label" Content="Translate From" Margin="10,10,10.2,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" HorizontalContentAlignment="Center"/>
-            <Label x:Name="label_Copy" Content="Translate To" Margin="9.8,10,11.4,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" Grid.Column="1" HorizontalContentAlignment="Center"/>
-            <ListBox x:Name="listBoxTo" Margin="8.8,40,10.4,10" SelectionChanged="listBoxTo_SelectionChanged" Grid.Column="1"/>
+            <ListBox x:Name="listBoxFrom" Margin="10,40,10.2,10" SelectionChanged="listBoxFrom_SelectionChanged">
+                <ListBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                        <GradientStop Color="White"/>
+                    </LinearGradientBrush>
+                </ListBox.Background>
+            </ListBox>
+            <Label x:Name="labelFrom" Content="Translate From" Margin="10,10,10.2,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" HorizontalContentAlignment="Center"/>
+            <Label x:Name="labelTo" Content="Translate To" Margin="9.8,10,11.4,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" Grid.Column="1" HorizontalContentAlignment="Center"/>
+            <ListBox x:Name="listBoxTo" Margin="8.8,40,10.4,10" SelectionChanged="listBoxTo_SelectionChanged" Grid.Column="1">
+                <ListBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF9CC3C7" Offset="1"/>
+                        <GradientStop Color="White"/>
+                    </LinearGradientBrush>
+                </ListBox.Background>
+            </ListBox>
         </Grid>
+        <Label x:Name="label1_Copy1" Content="File type" HorizontalAlignment="Left" Margin="8,10,0,0" VerticalAlignment="Top" Width="86" Height="26" HorizontalContentAlignment="Right"/>
     </Grid>
 </Window>
