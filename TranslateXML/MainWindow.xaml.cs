@@ -139,6 +139,7 @@ namespace TranslateXML
         {
             if (!bTranslating) progress.Value = 0;
             if (!bTranslating) textBoxProgress.Text = "";
+            buttonTranslate.Content = bTranslating ? "Cancel" : "Translate";
             Cursor = bTranslating ? Cursors.Wait : Cursors.Arrow;
             buttonAddXML.IsEnabled = !bTranslating;
             comboBoxInput.IsEnabled = !bTranslating;
