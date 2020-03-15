@@ -237,6 +237,10 @@ namespace TranslateXML
                     comboBoxInput.SelectedIndex = 1;
                     listBoxFrom.SelectedItem = es;
                     break;
+                case 2:
+                    comboBoxInput.SelectedIndex = 2;
+                    listBoxFrom.SelectedItem = en;
+                    break;
             }
             listBoxFrom.ScrollIntoView(listBoxFrom.SelectedItem);
         }

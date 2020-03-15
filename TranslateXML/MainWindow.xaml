@@ -40,6 +40,7 @@
             </ComboBox.Background>
             <ComboBoxItem Content="SB xml"/>
             <ComboBoxItem Content="SB resx"/>
+            <ComboBoxItem Content="SB-Prime resx"/>
         </ComboBox>
         <Button x:Name="buttonHelp" Content="Help" Margin="0,10,10.4,0" VerticalAlignment="Top" Click="buttonHelp_Click" HorizontalAlignment="Right" Width="85" Height="22">
             <Button.Background>
