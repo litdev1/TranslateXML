@@ -73,6 +73,9 @@ namespace TranslateXML
             item = new ListBoxItem();
             item.Content = SBpath + "Strings.es.resx";
             comboBoxInput.Items.Add(item);
+            item = new ListBoxItem();
+            item.Content = "C:\\Users\\steve\\Documents\\Visual Studio 2019\\Projects\\SmallBasic\\SB-Prime\\SB-Prime\\Properties\\Strings.resx";
+            comboBoxInput.Items.Add(item);
 
             string[] files = Directory.GetFiles(SBpath + "\\lib");
             foreach (string file in files)
@@ -175,7 +178,7 @@ namespace TranslateXML
                         });
                     }
                 }
-                Parse(child);
+                if (child.Name != "resheader") Parse(child);
             }
         }
 
