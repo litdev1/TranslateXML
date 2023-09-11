@@ -66,6 +66,8 @@ namespace TranslateXML
                 GetToken();
                 string txtToTranslate = sourceText;
                 string uri = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=" + System.Web.HttpUtility.UrlEncode(txtToTranslate) + "&from=" + langFrom + "&to=" + langTo;
+                WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 WebRequest translationWebRequest = WebRequest.Create(uri);
                 translationWebRequest.Headers.Add("Authorization", token);
                 WebResponse response = translationWebRequest.GetResponse();
@@ -88,6 +90,8 @@ namespace TranslateXML
             {
                 GetToken();
                 string uri = "http://api.microsofttranslator.com/v2/Http.svc/GetLanguagesForTranslate";
+                WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 WebRequest languagesWebRequest = WebRequest.Create(uri);
                 languagesWebRequest.Headers.Add("Authorization", token);
                 WebResponse response = languagesWebRequest.GetResponse();
@@ -107,6 +111,8 @@ namespace TranslateXML
             {
                 GetToken();
                 string uri = "http://api.microsofttranslator.com/v2/Http.svc/GetLanguageNames?locale=" + CultureInfo.CurrentCulture.Name;
+                WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 WebRequest languagesWebRequest = WebRequest.Create(uri);
                 languagesWebRequest.Headers.Add("Authorization", token);
                 languagesWebRequest.ContentType = "text/xml";
@@ -251,6 +257,8 @@ namespace TranslateXML
                 ////string url = String.Format("https://translate.google.co.uk/#{0}/{1}/{2}", langFrom, langTo, HttpUtility.UrlEncode(sourceText));
                 //string url = String.Format("https://translate.google.com/?hl=en&eotf=1&sl={0}&tl={1}&q={2}", langFrom, langTo, HttpUtility.UrlEncode(sourceText));
 
+                //WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 //WebRequest translationWebRequest = WebRequest.Create(url);
                 //WebResponse response = translationWebRequest.GetResponse();
                 //Stream stream = response.GetResponseStream();
@@ -350,6 +358,8 @@ namespace TranslateXML
             queryString["safesearch"] = "Moderate";
             string uri = "https://api.cognitive.microsoft.com/bing/v7.0/search?" + queryString;
 
+            WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpResponseMessage response = clientSearch.GetAsync(uri).Result;
             Stream stream = response.Content.ReadAsStreamAsync().Result;
             return (JsonWeb)jsonSerializer.ReadObject(stream);
@@ -385,6 +395,8 @@ namespace TranslateXML
             //content.Headers.ContentLength = byteData.Length;
             //clientSpell.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+            WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpResponseMessage response = clientSpell.PostAsync(uri, content).Result;
             Stream stream = response.Content.ReadAsStreamAsync().Result;
             return (JsonWeb)jsonSerializer.ReadObject(stream);
@@ -404,6 +416,8 @@ namespace TranslateXML
 
             try
             {
+                WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 HttpResponseMessage response = clientTranslate.PostAsync(uri, new StringContent(requestBody, Encoding.UTF8, "application/json")).Result;
                 string result = response.Content.ReadAsStringAsync().Result;
                 TranslationResult[] deserializedOutput = JsonConvert.DeserializeObject<TranslationResult[]>(result);
@@ -427,6 +441,8 @@ namespace TranslateXML
 
             try
             {
+                WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 HttpResponseMessage response = clientTranslate.GetAsync(uri).Result;
                 string result = response.Content.ReadAsStringAsync().Result;
                 AvailableLanguagesResult deserializedOutput = JsonConvert.DeserializeObject<AvailableLanguagesResult>(result);
