@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
+using LibreTranslate.Net;
 
 namespace TranslateXML
 {
@@ -144,6 +145,7 @@ namespace TranslateXML
     {
         private static Dictionary<string, string> languageList = new Dictionary<string, string>();
         private static Cognitive cognitive = new Cognitive();
+        private static LibreTranslate.Net.LibreTranslate libreTranslate = new LibreTranslate.Net.LibreTranslate("http://localhost:5000");
 
         private static void SetLanguages()
         {
@@ -298,6 +300,30 @@ namespace TranslateXML
                 //    }
                 //}
                 //return sb.ToString().Replace("<br>", Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public string Translate2(string sourceText, string langFrom, string langTo)
+        {
+            try
+            {
+                //var supportedLanguages = libreTranslate.GetSupportedLanguagesAsync();
+                //supportedLanguages.Wait();
+                //supportedLanguages.Result.Where(x => x.Code == langFrom);
+                var translatedText = libreTranslate.TranslateAsync(new Translate()
+                {
+                    //ApiKey = "c958b858-effa-4acc-b7ea-819dca9b3538", //120 pm
+                    ApiKey = "c7daca6b-becf-4ed7-9361-6797cd861d1b", //1000000 pm
+                    Source = LanguageCode.FromString(langFrom),
+                    Target = LanguageCode.FromString(langTo),
+                    Text = sourceText
+                });
+                translatedText.Wait();
+                return translatedText.Result;
             }
             catch (Exception ex)
             {

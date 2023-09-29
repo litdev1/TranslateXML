@@ -8,14 +8,19 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
+using LibreTranslate.Net;
 
 namespace TranslateXML
 {
+    enum eEngine { AZURE, LIBRE }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private eEngine engine = eEngine.LIBRE;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -171,7 +176,16 @@ namespace TranslateXML
                     nodeCount++;
                     if (bTranslating)
                     {
-                        child.Value = translator.Translate(child.Value, languages[iFrom], languages[iTo]);
+                        switch (engine)
+                        {
+                            case eEngine.AZURE:
+                                child.Value = translator.Translate(child.Value, languages[iFrom], languages[iTo]);
+                                break;
+                            case eEngine.LIBRE:
+                                child.Value = translator.Translate2(child.Value, languages[iFrom], languages[iTo]);
+                                break;
+                        }
+
                         Dispatcher.Invoke(() => {
                             progress.Value = nodeCount;
                             textBoxProgress.Text = string.Format("{0} % Complete", 100 * nodeCount / totalCount);
