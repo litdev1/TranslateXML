@@ -25,6 +25,8 @@ namespace TranslateXML
         {
             InitializeComponent();
 
+            engine = File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/LIBRE.txt") ? eEngine.LIBRE : eEngine.AZURE;
+
             languages = translator.GetLanguagesForTranslate();
             languageNames = translator.GetLanguageNames();
             if (null == languages || null == languageNames)
@@ -36,9 +38,26 @@ namespace TranslateXML
                 this.Close();
             }
 
-            ListBoxItem item;
+            int i;
+            if (engine == eEngine.LIBRE)
+            {
+                i = 0;
+                foreach (string language in languages)
+                {
+                    try
+                    {
+                        LanguageCode.FromString(language);
+                    }
+                    catch (Exception ex)
+                    {
+                        languageNames[i] = "*" + languageNames[i];
+                    }
+                    i++;
+                }
+            }
 
-            int i = 0;
+            i = 0;
+            ListBoxItem item;
             foreach (string languageName in languageNames)
             {
                 string itemText = languageName + " (" + languages[i++] + ")";

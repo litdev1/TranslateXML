@@ -311,9 +311,6 @@ namespace TranslateXML
         {
             try
             {
-                //var supportedLanguages = libreTranslate.GetSupportedLanguagesAsync();
-                //supportedLanguages.Wait();
-                //supportedLanguages.Result.Where(x => x.Code == langFrom);
                 var translatedText = libreTranslate.TranslateAsync(new Translate()
                 {
                     //ApiKey = "c958b858-effa-4acc-b7ea-819dca9b3538", //120 pm
