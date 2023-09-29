@@ -43,6 +43,8 @@ namespace TranslateXML
 
             String strTranslatorAccessURI = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13";
             String strRequestDetails = string.Format("grant_type=client_credentials&client_id={0}&client_secret={1}&scope=http://api.microsofttranslator.com", HttpUtility.UrlEncode(clientID), HttpUtility.UrlEncode(clientSecret));
+            WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             WebRequest webRequest = WebRequest.Create(strTranslatorAccessURI);
             webRequest.ContentType = "application/x-www-form-urlencoded";
             webRequest.Method = "POST";
@@ -90,6 +92,8 @@ namespace TranslateXML
             {
                 GetToken();
                 string uri = "http://api.microsofttranslator.com/v2/Http.svc/GetLanguagesForTranslate";
+                WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 WebRequest languagesWebRequest = WebRequest.Create(uri);
