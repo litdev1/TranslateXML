@@ -83,7 +83,7 @@
             </ListBox>
             <Label x:Name="labelFrom" Content="Translate From" Margin="10,10,10.2,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" HorizontalContentAlignment="Center"/>
             <Label x:Name="labelTo" Content="Translate To" Margin="9.8,10,11.4,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.059" Height="25" Grid.Column="1" HorizontalContentAlignment="Center"/>
-            <ListBox x:Name="listBoxTo" Margin="8.8,40,10.4,10" SelectionChanged="listBoxTo_SelectionChanged" Grid.Column="1">
+            <ListBox x:Name="listBoxTo" Margin="8.8,40,10.4,10" SelectionChanged="listBoxTo_SelectionChanged" Grid.Column="1" SelectionMode="Extended">
                 <ListBox.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF9CC3C7" Offset="1"/>

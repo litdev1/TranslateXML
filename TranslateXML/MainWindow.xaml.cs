@@ -150,7 +150,8 @@ namespace TranslateXML
         private List<string> languages;
         private List<string> languageNames;
         private int iFrom;
-        private int iTo;
+        private List<int> iTo = new List<int>();
+        private int numRemaining;
         private string xmlFrom;
         private string xmlTo;
         private int nodeCount;
@@ -181,12 +182,14 @@ namespace TranslateXML
             bTranslating = true;
             XmlDocument doc = (XmlDocument)((Object[])obj)[0];
             string xmlTo = (string)((Object[])obj)[1];
-            Parse(doc.DocumentElement);
+            int _iTo = (int)((Object[])obj)[2];
+            Parse(doc.DocumentElement, _iTo);
             if (bTranslating) doc.Save(xmlTo);
-            bTranslating = false;
+            numRemaining--;
+            if (numRemaining == 0) bTranslating = false; // All complete?
         }
 
-        private void Parse(XmlNode node)
+        private void Parse(XmlNode node, int _iTo)
         {
             foreach (XmlNode child in node.ChildNodes)
             {
@@ -198,10 +201,10 @@ namespace TranslateXML
                         switch (engine)
                         {
                             case eEngine.AZURE:
-                                child.Value = translator.Translate(child.Value, languages[iFrom], languages[iTo]);
+                                child.Value = translator.Translate(child.Value, languages[iFrom], languages[_iTo]);
                                 break;
                             case eEngine.LIBRE:
-                                child.Value = translator.Translate2(child.Value, languages[iFrom], languages[iTo]);
+                                child.Value = translator.Translate2(child.Value, languages[iFrom], languages[_iTo]);
                                 break;
                         }
 
@@ -211,7 +214,7 @@ namespace TranslateXML
                         });
                     }
                 }
-                if (child.Name != "resheader") Parse(child);
+                if (child.Name != "resheader") Parse(child, _iTo);
             }
         }
 
@@ -224,23 +227,31 @@ namespace TranslateXML
             }
             else
             {
+                progress.Value = 0;
                 xmlFrom = comboBoxInput.Text;
                 if (!File.Exists(xmlFrom)) return;
-                xmlTo = textBoxOutput.Text + "\\" + Path.GetFileNameWithoutExtension(xmlFrom) + "." + languages[iTo].Substring(0, 2) + Path.GetExtension(xmlFrom);
-                if (comboBox.SelectedIndex == 1) xmlTo = xmlTo.Replace(".es.", ".");
-                progress.Value = 0;
 
-                XmlDocument doc = new XmlDocument();
-                doc.Load(xmlFrom);
-                nodeCount = 0;
-                Parse(doc.DocumentElement);
-                totalCount = nodeCount;
-                progress.Maximum = totalCount;
+                numRemaining = iTo.Count;
+                foreach (int _iTo in iTo)
+                {
+                    xmlTo = textBoxOutput.Text + "\\" + Path.GetFileNameWithoutExtension(xmlFrom) + "." + languages[_iTo].Substring(0, 2) + Path.GetExtension(xmlFrom);
+                    if (comboBox.SelectedIndex == 1) xmlTo = xmlTo.Replace(".es.", ".");
 
-                nodeCount = 0;
-                Thread thread = new Thread(new ParameterizedThreadStart(Worker));
-                thread.Start(new Object[] { doc, xmlTo });
-                buttonTranslate.Content = "Cancel";
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(xmlFrom);
+                    if (_iTo == iTo[0])
+                    {
+                        nodeCount = 0;
+                        Parse(doc.DocumentElement, _iTo);
+                        totalCount = nodeCount;
+                        progress.Maximum = totalCount;
+                    }
+
+                    nodeCount = 0;
+                    Thread thread = new Thread(new ParameterizedThreadStart(Worker));
+                    thread.Start(new Object[] { doc, xmlTo, _iTo });
+                    buttonTranslate.Content = "Cancel";
+                }
             }
         }
 
@@ -254,8 +265,32 @@ namespace TranslateXML
         private void listBoxTo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox listbox = (ListBox)sender;
-            iTo = listbox.SelectedIndex;
-            labelTo.Content = "Translate to " + languageNames[iTo];
+            iTo.Clear();
+            if (listbox.SelectedItems.Count == 1)
+            {
+                iTo.Add(listbox.SelectedIndex);
+                labelTo.Content = "Translate to " + languageNames[listbox.SelectedIndex];
+            }
+            else if (listbox.SelectedItems.Count > 1)
+            {
+                foreach (ListBoxItem item in listbox.SelectedItems)
+                {
+                    for (int i = 0; i <  languageNames.Count; i++)
+                    {
+                        string itemLanguage = item.Content.ToString();
+                        if (itemLanguage.StartsWith(languageNames[i]))
+                        {
+                            iTo.Add(i);
+                            break;
+                        }
+                    }
+                }
+                labelTo.Content = "Translate to multiple (" + iTo.Count + ")";
+            }
+            else
+            {
+                labelTo.Content = "Translate to no selection";
+            }
         }
 
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
