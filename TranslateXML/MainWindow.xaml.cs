@@ -243,7 +243,7 @@ namespace TranslateXML
                     {
                         nodeCount = 0;
                         Parse(doc.DocumentElement, _iTo);
-                        totalCount = nodeCount;
+                        totalCount = nodeCount * iTo.Count;
                         progress.Maximum = totalCount;
                     }
 
