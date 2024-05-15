@@ -151,7 +151,6 @@ namespace TranslateXML
         private List<string> languageNames;
         private int iFrom;
         private List<int> iTo = new List<int>();
-        private int numRemaining;
         private string xmlFrom;
         private string xmlTo;
         private int nodeCount;
@@ -182,11 +181,19 @@ namespace TranslateXML
             bTranslating = true;
             XmlDocument doc = (XmlDocument)((Object[])obj)[0];
             string xmlTo = (string)((Object[])obj)[1];
-            int _iTo = (int)((Object[])obj)[2];
-            Parse(doc.DocumentElement, _iTo);
-            if (bTranslating) doc.Save(xmlTo);
-            numRemaining--;
-            if (numRemaining == 0) bTranslating = false; // All complete?
+            
+            foreach (int _iTo in iTo)
+            {
+                Dispatcher.Invoke(() => {
+                    xmlTo = textBoxOutput.Text + "\\" + Path.GetFileNameWithoutExtension(xmlFrom) + "." + languages[_iTo].Substring(0, 2) + Path.GetExtension(xmlFrom);
+                    if (comboBox.SelectedIndex == 1) xmlTo = xmlTo.Replace(".es.", ".");
+                });
+
+                doc.Load(xmlFrom);
+                Parse(doc.DocumentElement, _iTo);
+                doc.Save(xmlTo);
+            }
+            bTranslating = false; // All complete?
         }
 
         private void Parse(XmlNode node, int _iTo)
@@ -231,27 +238,19 @@ namespace TranslateXML
                 xmlFrom = comboBoxInput.Text;
                 if (!File.Exists(xmlFrom)) return;
 
-                numRemaining = iTo.Count;
-                foreach (int _iTo in iTo)
-                {
-                    xmlTo = textBoxOutput.Text + "\\" + Path.GetFileNameWithoutExtension(xmlFrom) + "." + languages[_iTo].Substring(0, 2) + Path.GetExtension(xmlFrom);
-                    if (comboBox.SelectedIndex == 1) xmlTo = xmlTo.Replace(".es.", ".");
+                bTranslating = false;
+                XmlDocument doc = new XmlDocument();
+                doc.Load(xmlFrom);
+                nodeCount = 0;
+                Parse(doc.DocumentElement, iTo[0]);
+                totalCount = nodeCount * iTo.Count;
+                progress.Maximum = totalCount;
 
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(xmlFrom);
-                    if (_iTo == iTo[0])
-                    {
-                        nodeCount = 0;
-                        Parse(doc.DocumentElement, _iTo);
-                        totalCount = nodeCount * iTo.Count;
-                        progress.Maximum = totalCount;
-                    }
-
-                    nodeCount = 0;
-                    Thread thread = new Thread(new ParameterizedThreadStart(Worker));
-                    thread.Start(new Object[] { doc, xmlTo, _iTo });
-                    buttonTranslate.Content = "Cancel";
-                }
+                nodeCount = 0;
+                bTranslating = true;
+                Thread thread = new Thread(new ParameterizedThreadStart(Worker));
+                thread.Start(new Object[] { doc, xmlTo });
+                buttonTranslate.Content = "Cancel";
             }
         }
 
