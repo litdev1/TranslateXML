@@ -64,13 +64,21 @@ namespace TranslateXML
                 item = new ListBoxItem();
                 item.Content = itemText;
                 listBoxFrom.Items.Add(item);
-                if (languageName.StartsWith("English", StringComparison.InvariantCultureIgnoreCase)) en = item;
-                if (languageName.StartsWith("Spanish", StringComparison.InvariantCultureIgnoreCase)) es = item;
+                if (languageName == "English") en = item;
+                if (languageName == "Spanish") es = item;
 
                 item = new ListBoxItem();
                 item.Content = itemText;
                 listBoxTo.Items.Add(item);
-                if (languageName.StartsWith("Norwegian", StringComparison.InvariantCultureIgnoreCase)) no = item;
+                if (languageName == "Arabic") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "Chinese") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "French") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "German") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "Hindi") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "Norwegian") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "Polish") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "Russian") listBoxTo.SelectedItems.Add(item);
+                if (languageName == "Spanish") listBoxTo.SelectedItems.Add(item);
             }
 
             comboBox.SelectedIndex = 0;
@@ -82,7 +90,6 @@ namespace TranslateXML
             }
             textBoxOutput.Text.Trim(new char[] { '\\' });
 
-            listBoxTo.SelectedItem = no;
             listBoxTo.ScrollIntoView(listBoxTo.SelectedItem);
 
             SBpath = Settings.GetValue("SBPATH");
@@ -157,7 +164,6 @@ namespace TranslateXML
         private int totalCount;
         private ListBoxItem en;
         private ListBoxItem es;
-        private ListBoxItem no;
         private string SBpath = null;
         private DispatcherTimer dispatcherTimer = new DispatcherTimer();
         private bool bTranslating = false;
@@ -215,6 +221,7 @@ namespace TranslateXML
                                 break;
                         }
 
+                        Thread.Sleep(1);
                         Dispatcher.Invoke(() => {
                             progress.Value = nodeCount;
                             textBoxProgress.Text = string.Format("{0} % Complete", 100 * nodeCount / totalCount);
